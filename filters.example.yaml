@@ -1,0 +1,40 @@
+# Tender filter rules.
+#
+# Copy this to filters.yaml and edit. The file holds a list of independent
+# rules. A tender is reported if it matches ANY rule. Within a single rule,
+# every condition you specify must pass (logical AND between condition types).
+# Omit a condition to ignore it.
+#
+# Conditions:
+#   keywords      : list of words/phrases matched (case-insensitive) against the
+#                   tender name. See keyword_logic.
+#   keyword_logic : "any" (default) -> match if at least one keyword is present.
+#                   "all"           -> match only if every keyword is present.
+#   budget_min    : minimum budget in MNT (tugrik). Tenders with no parseable
+#                   budget are treated as NOT matching a budget condition.
+#   budget_max    : maximum budget in MNT.
+#   categories    : list of substrings matched against the procurement method
+#                   (ХАА-ны журам), case-insensitive. Match if any is present.
+#   regions       : list of substrings matched (case-insensitive) against the
+#                   buyer name + tender name (the listing does not expose a
+#                   dedicated aimag field, so this is a best-effort text match).
+#                   Match if any is present.
+#   buyers        : list of substrings matched against the buyer/client name.
+#
+# Notes are Mongolian-Cyrillic friendly; everything is UTF-8.
+
+- name: "Construction & design jobs"
+  keywords: ["зураг төсөв", "барилга", "засвар", "шинэчлэх"]
+  keyword_logic: any
+  budget_min: 50000000        # 50 million MNT
+  budget_max: 2000000000      # 2 billion MNT
+
+- name: "IT / equipment supply"
+  keywords: ["тоног төхөөрөмж", "программ", "компьютер", "сервер"]
+  keyword_logic: any
+  budget_min: 10000000
+
+- name: "Ulaanbaatar water/utilities (any budget)"
+  keywords: ["ус", "сантехник", "дулаан"]
+  keyword_logic: any
+  regions: ["Улаанбаатар", "Ус сувгийн", "дулааны сүлжээ"]

@@ -1,0 +1,28 @@
+# Secrets
+.env
+
+# Environment-specific filter rules (commit filters.example.yaml instead)
+filters.yaml
+
+# Local state
+*.db
+*.sqlite
+*.sqlite3
+data/
+
+# Playwright browser profile (cf_clearance cookie cache)
+.pw-profile/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,19 @@
+[Unit]
+Description=Mongolia tender filter & Telegram notifier
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# EDIT these two paths/user to match your server:
+User=REPLACE_USER
+WorkingDirectory=/home/REPLACE_USER/tenderbot
+ExecStart=/home/REPLACE_USER/tenderbot/.venv/bin/python -m tenderbot --loop
+Restart=always
+RestartSec=30
+# Keep logs in journald; view with: journalctl -u tenderbot -f
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
