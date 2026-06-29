@@ -13,6 +13,17 @@ echo ">> [1/5] system packages"
 sudo apt-get update -y
 sudo apt-get install -y python3-venv python3-pip wget ca-certificates
 
+# Chrome can spike RAM; on a small (<2GB) droplet add swap so it doesn't OOM.
+TOTAL_KB=$(awk '/MemTotal/{print $2}' /proc/meminfo)
+if [ "${TOTAL_KB:-0}" -lt 2000000 ] && [ ! -f /swapfile ]; then
+  echo ">> adding 2G swap (low RAM detected)"
+  sudo fallocate -l 2G /swapfile || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+  sudo chmod 600 /swapfile
+  sudo mkswap /swapfile
+  sudo swapon /swapfile
+  grep -q '/swapfile' /etc/fstab || echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+fi
+
 echo ">> [2/5] Google Chrome (best at passing Cloudflare)"
 if ! command -v google-chrome >/dev/null 2>&1; then
   wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /tmp/chrome.deb
